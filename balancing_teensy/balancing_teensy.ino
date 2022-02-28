@@ -77,7 +77,7 @@ void setup() {
     &publisher,
     &node,
     ROSIDL_GET_MSG_TYPE_SUPPORT(sensor_msgs, msg, Imu),
-    "/balancing/imu"));
+    "/balancing/imu/data_raw"));
     
   const unsigned int timer_timeout = 100;
   RCCHECK(rclc_timer_init_default(
