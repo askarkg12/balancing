@@ -3,8 +3,8 @@
 <package format="3">
   <name>mpy_6050_tools</name>
   <version>0.0.0</version>
-  <description>TODO: Package description</description>
-  <maintainer email="askar.sulaimanov@arctoris.com">askar</maintainer>
+  <description>A package with tools for working with MPU6050 IMU</description>
+  <maintainer email="askarkg12@gmail.com">Askar Sulaimanov</maintainer>
   <license>TODO: License declaration</license>
 
   <test_depend>ament_copyright</test_depend>
