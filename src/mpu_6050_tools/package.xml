@@ -1,7 +1,7 @@
 <?xml version="1.0"?>
 <?xml-model href="http://download.ros.org/schema/package_format3.xsd" schematypens="http://www.w3.org/2001/XMLSchema"?>
 <package format="3">
-  <name>mpy_6050_tools</name>
+  <name>mpu_6050_tools</name>
   <version>0.0.0</version>
   <description>A package with tools for working with MPU6050 IMU</description>
   <maintainer email="askarkg12@gmail.com">Askar Sulaimanov</maintainer>

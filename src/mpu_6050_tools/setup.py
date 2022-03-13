@@ -1,6 +1,6 @@
 from setuptools import setup
 
-package_name = "mpy_6050_tools"
+package_name = "mpu_6050_tools"
 
 setup(
     name=package_name,
@@ -19,7 +19,7 @@ setup(
     tests_require=["pytest"],
     entry_points={
         "console_scripts": [
-            "complemetary_filter = mpy_6050_tools.complemetary_filter:main"
+            "complemetary_filter = mpu_6050_tools.complemetary_filter:main"
         ],
     },
 )
