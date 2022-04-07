@@ -19,7 +19,7 @@ setup(
     tests_require=["pytest"],
     entry_points={
         "console_scripts": [
-            "complemetary_filter = mpu_6050_tools.complemetary_filter:main"
+            "complementary_filter = mpu_6050_tools.complementary_filter:main"
         ],
     },
 )
