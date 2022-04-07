@@ -5,7 +5,7 @@ from rclpy.node import Node
 from sensor_msgs.msg import Imu
 
 
-class MPU6050ComplemetaryFilter(Node):
+class MPU6050ComplementaryFilter(Node):
     """TODO."""
 
     def __init__(self):
@@ -25,7 +25,7 @@ class MPU6050ComplemetaryFilter(Node):
 def main(args=None):
     """TODO."""
     rclpy.init(args=args)
-    comp_filter = MPU6050ComplemetaryFilter()
+    comp_filter = MPU6050ComplementaryFilter()
     rclpy.spin(comp_filter)
 
     comp_filter.destroy_node()
