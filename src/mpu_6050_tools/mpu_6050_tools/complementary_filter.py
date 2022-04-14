@@ -19,6 +19,7 @@ class MPU6050ComplementaryFilter(Node):
         self.subscription = self.create_subscription(
             Imu, "/imu/data_raw", self.listener_callback, 10
         )
+        self.publisher_ = self.create_publisher(Imu, "/imu/data_comp", 10)
         self.subscription
         self.accel_angle_z = 0
         self.gyro_angle_x = 0
@@ -67,6 +68,7 @@ class MPU6050ComplementaryFilter(Node):
         complementary_imu.orientation.y = q.y
         complementary_imu.orientation.z = q.z
         complementary_imu.orientation.w = q.w
+        self.publisher_.publish(complementary_imu)
 
 
 def main(args=None):
