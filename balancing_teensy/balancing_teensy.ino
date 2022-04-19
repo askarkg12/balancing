@@ -22,6 +22,13 @@ rcl_allocator_t allocator;
 rcl_node_t node;
 rcl_timer_t timer;
 
+rcl_timer_t motor_timer;
+unsigned long last_cmd_vel_time;
+const unsigned int motor_timeout = 1000;
+const unsigned int motor_period = 100;
+
+elapsedMillis millisPassed;
+
 sensor_msgs__msg__Imu imu_msg;
 std_msgs__msg__Int64 period_msg;
 sensors_event_t a, g, temp;
@@ -74,6 +81,19 @@ void timer_callback(rcl_timer_t * timer, int64_t last_call_time)
   }
 }
 
+void motor_callback(rcl_timer_t * timer, int64_t last_call_time)
+{
+  RCLC_UNUSED(last_call_time);
+
+  if (timer != NULL)
+  {
+    if ((last_cmd_vel_time - millisPassed) > motor_timeout)
+    {
+    
+    }
+  }
+}
+
 void setup() {
   set_microros_transports();
   pinMode(LED_PIN, OUTPUT);
@@ -104,6 +124,14 @@ void setup() {
     &timer,
     &support,
     RCL_MS_TO_NS(timer_timeout),
+    timer_callback));
+
+  // handler for running motors
+
+  RCCHECK(rclc_timer_init_default(
+    &motor_timer,
+    &support,
+    RCL_MS_TO_NS(motor_period),
     timer_callback));
 
   RCCHECK(rclc_executor_init(&executor, &support.context, 1, &allocator));
