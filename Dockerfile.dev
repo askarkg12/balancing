@@ -1,3 +1,9 @@
 FROM ros:foxy-ros-base
 
+RUN apt update && apt install -y \
+        pip
+
+RUN pip install \
+        numpy-quaternion
+
 WORKDIR /balancing-ws
