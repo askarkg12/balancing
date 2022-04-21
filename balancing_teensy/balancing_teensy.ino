@@ -27,6 +27,11 @@ unsigned long last_cmd_vel_time;
 const unsigned int motor_timeout = 1000;
 const unsigned int motor_period = 100;
 
+#define IN1 3
+#define IN2 4
+#define IN3 5
+#define IN4 6
+
 elapsedMillis millisPassed;
 
 sensor_msgs__msg__Imu imu_msg;
@@ -38,6 +43,40 @@ sensors_event_t a, g, temp;
 
 #define RCCHECK(fn) { rcl_ret_t temp_rc = fn; if((temp_rc != RCL_RET_OK)){error_loop();}}
 #define RCSOFTCHECK(fn) { rcl_ret_t temp_rc = fn; if((temp_rc != RCL_RET_OK)){}}
+
+void driveRight(float power){
+  if (power == 0.0){
+    analogWrite(IN1, 0);
+    analogWrite(IN2, 0);
+  }
+  else if ((power > 0) && (power <= 1))
+  {
+    analogWrite(IN1, 0);
+    analogWrite(IN2, power*256);
+  }
+  else if ((power < 0) && (power >= -1))
+  {
+    analogWrite(IN2, 0);
+    analogWrite(IN1, -power*256);
+  }
+}
+
+void driveLeft(float power){
+  if (power == 0.0){
+    analogWrite(IN3, 0);
+    analogWrite(IN4, 0);
+  }
+  else if ((power > 0) && (power <= 1))
+  {
+    analogWrite(IN3, 0);
+    analogWrite(IN4, power*256);
+  }
+  else if ((power < 0) && (power >= -1))
+  {
+    analogWrite(IN4, 0);
+    analogWrite(IN3, -power*256);
+  }
+}
 
 void error_loop(){
   while(1){
@@ -95,6 +134,10 @@ void motor_callback(rcl_timer_t * timer, int64_t last_call_time)
 }
 
 void setup() {
+  pinMode(IN1, OUTPUT);
+  pinMode(IN2, OUTPUT);
+  pinMode(IN3, OUTPUT);
+  pinMode(IN4, OUTPUT);
   set_microros_transports();
   pinMode(LED_PIN, OUTPUT);
   digitalWrite(LED_PIN, HIGH);  
