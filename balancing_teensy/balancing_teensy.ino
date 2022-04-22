@@ -6,6 +6,7 @@
 
 #include <sensor_msgs/msg/imu.h>
 #include <std_msgs/msg/int64.h>
+#include <geometry_msgs/msg/twist.h>
 //#include <geometry_msgs/msg/Quaternion.h>
 
 #include <Adafruit_MPU6050.h>
@@ -36,6 +37,8 @@ elapsedMillis millisPassed;
 
 sensor_msgs__msg__Imu imu_msg;
 std_msgs__msg__Int64 period_msg;
+geometry_msgs__msg__Twist cmd_vel_msg;
+
 sensors_event_t a, g, temp;
 //geometry_msgs__msg__Quaternion orientation;
 
@@ -86,7 +89,8 @@ void error_loop(){
 }
 
 void loop() {
-  RCSOFTCHECK(rclc_executor_spin_some(&executor, RCL_MS_TO_NS(1)));
+  //RCSOFTCHECK(rclc_executor_spin_some(&executor, RCL_MS_TO_NS(1)));
+  RCSOFTCHECK(rclc_executor_spin(&executor));
 }
 
 void period_change_callback(const void * msgin)
@@ -133,6 +137,11 @@ void motor_callback(rcl_timer_t * timer, int64_t last_call_time)
   }
 }
 
+void cmd_vel_callback(const void * msgin)
+{
+  const geometry_msgs__msg__Twist * msg = (const geometry_msgs__msg__Twist *)msgin;
+}
+
 void setup() {
   pinMode(IN1, OUTPUT);
   pinMode(IN2, OUTPUT);
@@ -161,6 +170,12 @@ void setup() {
     &node,
     ROSIDL_GET_MSG_TYPE_SUPPORT(sensor_msgs, msg, Imu),
     "/balancing/imu/data_raw"));
+
+  RCCHECK(rclc_publisher_init_default(
+    &publisher,
+    &node,
+    ROSIDL_GET_MSG_TYPE_SUPPORT(geometry_msgs, msg, Twist),
+    "/balancing/cmd_vel"));
     
   const unsigned int timer_timeout = 10;
   RCCHECK(rclc_timer_init_default(
@@ -177,8 +192,10 @@ void setup() {
     RCL_MS_TO_NS(motor_period),
     timer_callback));
 
-  RCCHECK(rclc_executor_init(&executor, &support.context, 1, &allocator));
+  RCCHECK(rclc_executor_init(&executor, &support.context, 3, &allocator));
   RCCHECK(rclc_executor_add_timer(&executor, &timer));
+  RCCHECK(rclc_executor_add_subscription(&executor, &subscriber, &cmd_vel_msg, &period_change_callback, ON_NEW_DATA));
+  
   RCCHECK(rclc_executor_add_subscription(&executor, &subscriber, &period_msg, &period_change_callback, ON_NEW_DATA));
 
   if (!mpu.begin())
